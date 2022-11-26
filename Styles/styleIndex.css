@@ -1,5 +1,5 @@
 body { 
-    background-image: url('./Pictures/train.jpg');
+    background-image: url('../Pictures/train.jpg');
     background-size : cover;
     background-repeat: no-repeat;
     font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
