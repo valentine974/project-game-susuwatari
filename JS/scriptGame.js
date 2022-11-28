@@ -1,149 +1,159 @@
-const myBlocks = [];
+const gravity = 1;
+let gameLength = 0;
+let points = 0;
 
-const gameLandscape = {
-  canvas: document.createElement("canvas"),
-  frames : 0,
+const platformImage = new Image();
+platformImage.src = "../Pictures/cloud.png";
 
-  start: function () {
-    this.canvas.width = 800;
-    this.canvas.height = 400;
-    this.context = this.canvas.getContext("2d");
-    document.body.insertBefore(this.canvas, document.body.childNodes[0]);
-    this.interval = setInterval(updateGameArea, 20);
-  },
-  clear: function () {
-    landscapeImage.move();
-    this.context.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    landscapeImage.draw();
-  },
-};
+const platforms = [
+  new Platform(platformImage, 350, 250, 150, 30),
+  new Platform(platformImage, 500, 180, 150, 30),
+  new Platform(platformImage, 700, 100, 150, 30),
+  new Platform(platformImage, 1350, 200, 150, 30),
+  new Platform(platformImage, 1600, 250, 150, 30),
+  new Platform(platformImage, 1850, 100, 150, 30),
+  new Platform(platformImage, 2100, 180, 150, 30),
+  new Platform(platformImage, 2350, 250, 150, 30),
+  new Platform(platformImage, 2650, 250, 150, 30),
+  new Platform(platformImage, 2800, 180, 150, 30),
+  new Platform(platformImage, 3000, 100, 150, 30),
+];
 
-const gravity = 0.5;
+// const calciferImage = new Image();
+// calciferImage.src = "../Pictures/calcifer.gif";
 
-  
+const calciferImageOne = new Image();
+calciferImageOne.src = "../Pictures/calcifer.png";
+
+const calciferImageTwo = new Image();
+calciferImageTwo.src = "../Pictures/calcifer2.png";
+
+
+
+const fires = [
+  new GhibliChar(calciferImageOne, calciferImageTwo, 550, 250, 60, 65),
+  new GhibliChar(calciferImageOne, calciferImageTwo, 750, 250, 60, 65),
+  new GhibliChar(calciferImageOne, calciferImageTwo, 1360, 145, 60, 65),
+  new GhibliChar(calciferImageOne, calciferImageTwo, 1900, 250, 60, 65),
+  new GhibliChar(calciferImageOne, calciferImageTwo, 2150, 130, 60, 65),
+  new GhibliChar(calciferImageOne, calciferImageTwo, 2550, 250, 60, 65),
+  new GhibliChar(calciferImageOne, calciferImageTwo, 3050, 250, 60, 65),
+];
+
+const starFoodImage = new Image();
+starFoodImage.src = "../Pictures/food.png";
+
+const starFood = [
+  new GhibliChar(starFoodImage,starFoodImage, 750, 60, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 950, 255, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 1450, 155, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 1550, 60, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 1900, 60, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 2150, 255, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 2550, 150, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 2900, 255, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 3050, 60, 55, 45),
+  new GhibliChar(starFoodImage,starFoodImage, 3500, 220, 110, 90),
+];
+
+const susuImage = new Image();
+susuImage.src = "../Pictures/SusuwatariV2.png";
+
+const susuwatari = new Player(susuImage, 160, 245, 80, 65);
+
+gameLandscape.start();
 
 function updateGameArea() {
   gameLandscape.clear();
   susuwatari.newPos();
-  susuwatari.update(); 
-  updateCalcifersImage()
-  // updateBlocksImage() 
-  // updateBlocks(); 
-} 
+  fires.forEach((fire) => {
+    fire.newPos();
+    fire.update();
+  });
+  starFood.forEach((star) => {
+    star.newPos();
+    star.update();
+  });
+  platforms.forEach((platform) => {
+    platform.draw();
+  });
+  susuwatari.update();
+  checkGameOver();
+  checkPoints();
+  gameLandscape.displayScore();
+}
 
-const trainPartOne = new Image();
-trainPartOne.src = "../Pictures/Train final.png"; 
+function checkGameOver() {
+  const crashed = fires.some(function (fire) {
+    return susuwatari.crashWith(fire);
+  });
 
-const landscapeImage = {
-  img: trainPartOne,
-  height: 400,
-  width: 3680, 
-  x: 0, 
-  speed: 0, // input the player's speed to moove the background Image
-  canvas: gameLandscape.canvas,
+  if (crashed) {
+    gameLandscape.stop();
+  }
+}
 
-  move: function () {
-    // susuwatari.speedX-=0.002
-    if(this.x >0 ){this.x = 0 }  
-    else if (this.x + this.width + this.speed < this.canvas.width){this.speed=0;} 
-    this.x += this.speed; 
+function checkPoints() {
+  if (points < 10) {
+    for (let i = 0; i < starFood.length; i++) {
+      if (susuwatari.crashWith(starFood[i])) {
+        starFood.splice(starFood[i], 1);
+        gameLandscape.score();
+        break;
+      }
+    }
+  } else {
+    gameLandscape.stop();
+  }
+}
+
+function updateTime (){
+  gameLandscape.time +=1
+}
+
+const arrows = {
+  left: {
+    pressed: false,
   },
-
-  draw: function () {
-    const ctx = gameLandscape.context;
-    ctx.drawImage(this.img, this.x, 0, this.width, this.height); 
+  right: {
+    pressed: false,
   },
 };
 
-// function updateBlocksImage() { 
-//  for (i = 0; i < myBlocks.length; i++) {  
-//    myBlocks[i].update();    
-//  } 
- 
-// }
-
-function updateCalcifersImage() { 
- for (i = 0; i < myBlocks.length; i++) {  
-  myBlocks[i].newPos(); 
-   myBlocks[i].update();    
- } 
- 
-}
-
-const susuImage = new Image();
-susuImage.src = "../Pictures/SusuwatariV2.png";
-const calciferImage = new Image();
-calciferImage.src = "../Pictures/calcifer.gif";
-
-const susuwatari = new ghibliChar(susuImage, 160, 245, 80, 65);
-
-gameLandscape.start();
-
-function updateCalcifers (){
-  let nextBlockX = gameLandscape.canvas.width
-  for (i = 0; i < myBlocks.length; i++) { 
-    myBlocks[i].x -= 30; 
-    myBlocks[i].update();   
-    nextBlockX = myBlocks[i].x +300
-  }
-
-    let y = 0
-    let x = nextBlockX;
-    let width = 50;
-    let height = 50;   
-    myBlocks.push(new ghibliChar(calciferImage, x, y, width, height)); 
-
-}
-
-
-// function updateBlocks() {// utiliser for i until 5  pour créer un nombre de plateformes limité 
-//    let nextBlockX = gameLandscape.canvas.width
-//   for (i = 0; i < myBlocks.length; i++) { 
-//     myBlocks[i].x -= 30;
-//     myBlocks[i].update();   
-//     nextBlockX = myBlocks[i].x +300
-//   }
-//     let y
-//     if(myBlocks.length%2===0){ y= 250}
-//     else {y = 150} 
-//     let x = nextBlockX;
-//     let width = 150;
-//     let height = 30;   
-//     myBlocks.push(new Blocks('black', x , y, width,height)); 
-  
-// }
-
 document.addEventListener("keydown", (e) => {
   switch (e.keyCode) {
-    case 38: // up arrow to make the Susuwatari 
-    susuwatari.speedY -= 20; 
-    susuwatari.speedX += 2;
-    landscapeImage.speed = -10; 
-    
-    updateCalcifers()
-    // updateBlocks()
+    case 38: // up arrow to make the Susuwatari
+      susuwatari.speedY -= 15; 
+      
 
       break;
 
     case 37: // left arrow
-      susuwatari.speedX -= 1;
-      landscapeImage.speed += 10;
+      arrows.left.pressed = true;
       break;
     case 39: // right arrow
-      susuwatari.speedX += 1;
-      landscapeImage.speed = -10;
-      // updateBlocks()
+      arrows.right.pressed = true;
 
-  updateCalcifers()
-      
       break;
   }
 });
 document.addEventListener("keyup", (e) => {
-  susuwatari.speedX = 0;
-  susuwatari.speedY = 0;
-  landscapeImage.speed = 0;
+  switch (e.keyCode) {
+    case 38: // up arrow to make the Susuwatari  jump
+      susuwatari.speedX = 0;
+      susuwatari.speedY = 0;
+      landscapeImage.speed = 0;
+
+      break;
+
+    case 37: // left arrow
+      arrows.left.pressed = false;
+      landscapeImage.speed = 0;
+      break;
+    case 39: // right arrow
+      arrows.right.pressed = false;
+      landscapeImage.speed = 0;
+
+      break;
+  }
 });
-
-
-

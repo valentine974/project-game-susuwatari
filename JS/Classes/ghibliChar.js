@@ -1,35 +1,37 @@
-class ghibliChar {
-    constructor(image, x, y, width, height) {
+class GhibliChar {
+    constructor(imageOne,imageTwo, x, y, width, height) {
       this.width = width;
       this.height = height;
       this.x = x;
       this.y = y;
       this.speedX = 0;
-      this.speedY = 1;
-      this.img = image;
+      this.speedY = 0;
+      this.img1 = imageOne;
+      this.img2 = imageTwo;
     }
   
     update() {
       const ctx = gameLandscape.context;
-      ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+      if(gameLandscape.time%2===0){ ctx.drawImage(this.img1, this.x, this.y, this.width, this.height); }
+      else {ctx.drawImage(this.img2, this.x, this.y, this.width, this.height); }
     }
   
     newPos() {
       this.x += this.speedX;
       this.y += this.speedY;
-      if(this.y + this.height + this.speedY <245+this.height) { this.speedY += gravity}
-      else { this.speedY = 0}
-    }
-    left() {
-      return this.x;
-    }
-    right() {
-      return this.x + this.width;
-    }
-    top() {
-      return this.y;
-    }
-    bottom() {
-      return this.y + this.height;
-    }
+      
   }
+
+  left() {
+    return this.x;
+  }
+  right() {
+    return this.x + this.width;
+  }
+  top() {
+    return this.y;
+  }
+  bottom() {
+    return this.y + this.height;
+  }
+}
