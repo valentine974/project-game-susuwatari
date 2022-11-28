@@ -1,5 +1,5 @@
 class Player {
-    constructor(image, x, y, width, height) {
+    constructor(image,image2, x, y, width, height) {
       this.width = width;
       this.height = height;
       this.x = x;
@@ -7,11 +7,22 @@ class Player {
       this.speedX = 0;
       this.speedY = 1;
       this.img = image;
+      this.img2 = image2;
+      this.ground = 245;
     }
   
     update() {
       const ctx = gameLandscape.context;
+      if(points<1){
       ctx.drawImage(this.img, this.x, this.y, this.width, this.height);
+      }
+      else {
+        this.height=110; 
+        this.width =70;
+        this.ground = 200;
+        ctx.drawImage(this.img2, this.x, this.y, this.width, this.height);
+
+      }
     }
   
     newPos() {
@@ -20,7 +31,7 @@ class Player {
       
       if (this.y<=0){this.speedY=0}
 
-      if(this.y + this.height + this.speedY <245+this.height) { this.speedY += gravity}
+      if(this.y + this.height + this.speedY <this.ground+this.height) { this.speedY += gravity}
       else { this.speedY = 0}
       
       // update the player speed and allow to jump & move at same time 
@@ -30,7 +41,7 @@ class Player {
       else { this.speedX=0
         if(arrows.right.pressed){ 
           gameLength +=5 
-          landscapeImage.speed -= 0.3; 
+          landscapeImage.speed =-4.5; 
           platforms.forEach((platform)=>{
           platform.x -=5 })
           fires.forEach((fire)=>{
@@ -43,7 +54,7 @@ class Player {
           
         else if(arrows.left.pressed){  
           gameLength -=5
-          landscapeImage.speed += 0.3;
+          landscapeImage.speed =4.5;
           platforms.forEach((platform)=>{
           platform.x +=5 })
           fires.forEach((fire)=>{
