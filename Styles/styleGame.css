@@ -5,8 +5,8 @@ body {
 canvas {
     border: 20px solid #6B84C8; 
     border-radius: 20px;
-    margin-top : 50px;
-    padding : -100px;
+    margin : 25px 0;
+    padding : -50px;
 
   }
 
@@ -65,3 +65,7 @@ H1 {
     color: white;
  }
 
+
+ audio {
+   display: none ;
+}
