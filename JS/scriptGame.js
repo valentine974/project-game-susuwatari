@@ -17,12 +17,7 @@ const susuwatari = new Player(susuImage, susuImageTwo, 160, 245, 80, 65);
 
 gameLandscape.start(); 
 
-window.onload = () => {
-  document.getElementById("start").onclick = () => {
-    gameLandscape.start();
-  };
-
-};
+ 
 
 //update the game
 
