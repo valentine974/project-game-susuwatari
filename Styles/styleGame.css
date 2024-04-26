@@ -3,18 +3,18 @@ body {
 }
 
 canvas {
-    border: 20px solid #6B84C8; 
-    border-radius: 20px;
-    margin : 25px 0;
-    padding : -50px;
+   border: 10px solid #6B84C8; 
+   margin : 25px 0;
+   padding : -50px; 
 
-  }
+ }
 
 body {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
+   display: flex;
+   flex-direction: column;
+   justify-content: center;
+   align-items: center;
+ 
 }
 
 header {
@@ -30,7 +30,7 @@ H1 {
     
 }
  span {
-    color: #AA4774;
+    color: red;
     
 
  }
@@ -40,7 +40,7 @@ H1 {
  }
 
  .goBack{
-    background-color: #AA4774; 
+    background-color: red; 
  }
 
 
